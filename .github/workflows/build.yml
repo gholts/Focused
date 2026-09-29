@@ -1,0 +1,21 @@
+name: Build dylib
+
+'on':
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - run: ./build.sh
+      - uses: actions/upload-artifact@v7
+        with:
+          name: WeChatFocused
+          path: build/WeChatFocused.dylib
+          if-no-files-found: error
