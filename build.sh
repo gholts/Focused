@@ -9,6 +9,6 @@ xcrun --sdk iphoneos clang \
   -install_name @rpath/WeChatFocused.dylib \
   -isysroot "$(xcrun --sdk iphoneos --show-sdk-path)" \
   -framework Foundation -framework UIKit -framework Photos \
-  -framework ImageIO -framework CoreGraphics \
+  -framework ImageIO -framework CoreGraphics -framework AVFoundation \
   -weak_framework PhotosUI -weak_framework UniformTypeIdentifiers \
   -o build/WeChatFocused.dylib src/Entry.m src/MomentsTab.m src/NativePicker.m

@@ -15,9 +15,15 @@ static void WCUpdateMomentItem(id tab) {
     id item = itemIvar ? object_getIvar(tab, itemIvar) : nil;
     if (!item) return;
 
-    if ([item respondsToSelector:sel_registerName("setNormalTitle:")]) WCMessage1(item, "setNormalTitle:", @"朋友圈");
     Class contextClass = objc_getClass("MMContext");
     id context = [contextClass respondsToSelector:sel_registerName("currentContext")] ? WCMessage0(contextClass, "currentContext") : nil;
+    id language = WCMessage1(context, "getService:", objc_getClass("MMLanguageMgr"));
+    NSString *title = [language respondsToSelector:sel_registerName("getStringForCurLanguage:")]
+                          ? WCMessage1(language, "getStringForCurLanguage:", @"FF_Entry_Album")
+                          : nil;
+    if (!title.length || [title isEqualToString:@"FF_Entry_Album"])
+        title = [NSBundle.mainBundle.preferredLocalizations.firstObject hasPrefix:@"zh"] ? @"朋友圈" : @"Moments";
+    if ([item respondsToSelector:sel_registerName("setNormalTitle:")]) WCMessage1(item, "setNormalTitle:", title);
     id theme = WCMessage1(context, "getService:", objc_getClass("MMThemeManager"));
     SEL svg = sel_registerName("svgImageNamed:size:color:");
     if (![theme respondsToSelector:svg]) return;
